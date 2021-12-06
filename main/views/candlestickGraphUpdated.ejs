@@ -16,7 +16,7 @@
 		<script type="text/javascript">
 			const queryString = window.location.search;
 			const urlParams = new URLSearchParams(queryString);
-			data = urlParams.get('dataPoints');
+			searchData = urlParams.get('dataPoints');
 			var chart = new CanvasJS.Chart("chartContainer",
     {
         title:{
@@ -34,13 +34,13 @@
             valueFormatString: "MMM-YY",
             labelAngle: -45
         },
-        data: [
+        data: JSON.parse("{{ articles }}"),
         {
             type: "candlestick",
             dataPoints: <%=' obj$' %>
 
         }
-        ]
+        
     });
             chart.render();
 		</script>

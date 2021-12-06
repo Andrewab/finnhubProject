@@ -14,7 +14,7 @@ async function stockCandles(symbol, resolution, from, to) {
     }
 }
 var finnHubData
-module.exports.generateChart =  async function(CurrentStock) {
+module.exports.generateChart =  function(CurrentStock) {
     console.log("In Generate Chart")
     //stockCandles('AAPL','M',1607241875,1638777875)
     
@@ -33,7 +33,7 @@ module.exports.generateChart =  async function(CurrentStock) {
     */    
         //console.log("1: " + currentTs + "2: " + pastTs)
     console.log("CurrentStock :" + CurrentStock + "past: " + pastTsSeconds + " current: " + currentTsSeconds);
-        tmp = await stockCandles(CurrentStock,'M',pastTsSeconds,currentTsSeconds);
+        tmp = stockCandles(CurrentStock,'M',pastTsSeconds,currentTsSeconds);
     //tmp = JSON.parse(FinnHubStockPrices);
     console.log(tmp)
     for (var i = 0; i < tmp.length; i++) {
