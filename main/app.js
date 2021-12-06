@@ -5,15 +5,21 @@ const express = require('express');
 const path = require('path');
 const router = express.Router();
 var app = express();
-
+app.set("view-engine", "ejs");
+app.use(express.json());
+//app.use(express.static())
 app.get('/candlestickGraphUpdated', function(req,res) {
 
 	//console.log('here')
 	//console.log(req.protocol + "://" + req.get('host') + req.originalUrl);
-	res.sendFile('views/candlestickGraphUpdated.html' + '?dataPoints=' + myMod.generateChart(req.query['CurrentStock']),{root : __dirname}/* */)
+
+	obj = myMod.generateChart(req.query.CurrentStock)
+	console.log(obj);
+	res.render('candlestickGraphUpdated.ejs',obj)
+
 })
 app.get('/',function(req,res) {
-	res.sendFile(__dirname + '/views/candlestickGraph.html');
+	res.render(__dirname + '/views/candlestickGraph.ejs');
 })
 /*
 var server = http.createServer(function(req, res) {

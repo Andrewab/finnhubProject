@@ -7,16 +7,21 @@ async function stockCandles(symbol, resolution, from, to) {
             'X-Finnhub-Token' : 'c6im5hiad3i8jt9dugng'
         }
         })
+        console.log(data.data)
         return data.data;
     } catch(err) {
         console.error(err);
     }
 }
 var finnHubData
-module.exports.generateChart =  function(CurrentStock) {
+module.exports.generateChart =  async function(CurrentStock) {
     console.log("In Generate Chart")
-    var currentTs = Math.round((new Date()).getTime() / 1000);
-    var pastTs = (currentTs - (525600 * 60 * 1000));
+    //stockCandles('AAPL','M',1607241875,1638777875)
+    
+    var currentTs = new Date();
+    var currentTsSeconds = Math.floor(currentTs.valueOf()/ 1000)
+    var pastTs = new Date(currentTs.getTime() - (31556926 * 1000))
+    var pastTsSeconds = Math.floor(pastTs.valueOf()/1000)
 /*
         var xhttp = new XMLHttpRequest();
         
@@ -25,21 +30,26 @@ module.exports.generateChart =  function(CurrentStock) {
                 finnHubData = xhttp.responseText;
             }
         }
-        */
-
-    console.log(stockCandles(CurrentStock,'M',pastTs,currentTs));
-        tmp = JSON.parse(JSON.stringify(stockCandles(CurrentStock,'M',pastTs,currentTs)));
+    */    
+        //console.log("1: " + currentTs + "2: " + pastTs)
+    console.log("CurrentStock :" + CurrentStock + "past: " + pastTsSeconds + " current: " + currentTsSeconds);
+        tmp = await stockCandles(CurrentStock,'M',pastTsSeconds,currentTsSeconds);
     //tmp = JSON.parse(FinnHubStockPrices);
+    console.log(tmp)
     for (var i = 0; i < tmp.length; i++) {
+                        //console.log('loop')
             date = new Date.parse(timestamp)
             year = date.getYear();
             month = date.getMonth();
             day = date.getDay();
+
             c = tmp.c[i];
             h = tmp.h[i];
             l = tmp.l[i];
             o = tmp.o[i];
             finnHubData += "{x: new Date(" + year + "," + month + "," + day + ",y:[" + o + "," + h + "," + l + "," + c + "]},"
+            //console.log("{x: new Date(" + year + "," + month + "," + day + ",y:[" + o + "," + h + "," + l + "," + c + "]},\n")
+
         }   
 /*
         var chart = new CanvasJS.Chart("chartContainer",
@@ -66,6 +76,9 @@ module.exports.generateChart =  function(CurrentStock) {
 
         }
         ]
-    });*/
+    });
+    console.log(finnHubData)
+    */
     return finnHubData;
+    
 }  
