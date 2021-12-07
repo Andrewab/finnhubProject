@@ -14,17 +14,66 @@ async function stockCandles(symbol, resolution, from, to) {
     }
 }
 //var finnHubData = []
-module.exports.generateChart =  async function(CurrentStock) {
+module.exports.generateChart =  async function(CurrentStock, chosenInterval='asdad') {
     //console.log("In Generate Chart")
     //tmp = await stockCandles('AAPL','M',1607241875,1638777875)
+    var resolution = "M"
     var finnHubData = []  
     var currentTs = new Date();
     var currentTsSeconds = Math.floor(currentTs.valueOf()/ 1000)
     var pastTs = new Date(currentTs.getTime() - (31556926 * 1000))
     var pastTsSeconds = Math.floor(pastTs.valueOf()/1000)
+    switch(chosenInterval) {
+    case '1d':
+        resolution = "30"
+        pastTs = new Date(currentTs.getTime() - (86400 * 1000))
+        pastTsSeconds = Math.floor(pastTs.valueOf()/1000)
+        break;
+    case '3d' :
+        resolution = "60"
+        pastTs = new Date(currentTs.getTime() - (86400 * 1000 * 3))
+        pastTsSeconds = Math.floor(pastTs.valueOf()/1000)
+        break;
+    case '5d' :
+        resolution = "60"
+        pastTs = new Date(currentTs.getTime() - (86400 * 1000 * 5))
+        pastTsSeconds = Math.floor(pastTs.valueOf()/1000)      
+        break;
+    case '1w' :
+        resolution = "60"
+        pastTs = new Date(currentTs.getTime() - (86400 * 1000 * 7))
+        pastTsSeconds = Math.floor(pastTs.valueOf()/1000)      
+        break;            
+    case '2w' :
+        resolution = "60"
+        pastTs = new Date(currentTs.getTime() - (86400 * 1000 * 14))
+        pastTsSeconds = Math.floor(pastTs.valueOf()/1000)      
+        break;
+    case '1m' :
+        resolution = "D"
+        pastTs = new Date(currentTs.getTime() - (2629743 * 1000))
+        pastTsSeconds = Math.floor(pastTs.valueOf()/1000)      
+        break;
+    case '3m' :
+        resolution = "D"
+        pastTs = new Date(currentTs.getTime() - (2629743 * 1000 * 3))
+        pastTsSeconds = Math.floor(pastTs.valueOf()/1000)      
+        break;
+    case '6m' :
+        resolution = "D"
+        pastTs = new Date(currentTs.getTime() - (2629743 * 1000 * 6))
+        pastTsSeconds = Math.floor(pastTs.valueOf()/1000)      
+        break;
+    case '1y' :
+        resolution = "W"
+        pastTs = new Date(currentTs.getTime() - (2629743 * 1000 * 12))
+        pastTsSeconds = Math.floor(pastTs.valueOf()/1000)      
+        break;
+}
+
 
     //console.log("CurrentStock :" + CurrentStock + "past: " + pastTsSeconds + " current: " + currentTsSeconds);
-    tmp = await stockCandles(CurrentStock,'M',pastTsSeconds,currentTsSeconds);
+    tmp = await stockCandles(CurrentStock,resolution,pastTsSeconds,currentTsSeconds);
     //tmp = JSON.parse(FinnHubStockPrices);
     //console.log(tmp)
     for (var i = 0; i < tmp.c.length; i++) {

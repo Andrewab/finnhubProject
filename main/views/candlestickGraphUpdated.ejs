@@ -14,7 +14,6 @@
 		</form>
         <div id="chartContainer" style="height: 300px; width: 100%;"></div>
         <script type="text/javascript">
-            //var tmp = JSON.parse(<%-candleStickPrices%>);
             var chart = new CanvasJS.Chart("chartContainer",
     {
         title:{
@@ -27,9 +26,8 @@
             prefix: "$ "
         },
         axisX: {
-            interval:2,
-            intervalType: "month",
-            valueFormatString: "MMM-YY",
+            interval:1,
+            valueFormatString: "MMM",
             labelAngle: -45
         },
         data:[

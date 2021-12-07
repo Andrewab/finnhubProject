@@ -22,7 +22,7 @@ app.post('/candlestickGraphUpdated', async function(req,res) {
 	let obj = await myMod.generateChart(req.body.CurrentStock);
 	//console.log(obj);
 	//chart = myMod.makeChart(obj);
-	res.render('candlestickGraphUpdated.ejs',{candleStickPrices : obj});
+	res.render('candlestickGraphUpdated.ejs',{candleStickPrices : obj,interval : 'day'});
 
 })
 app.get('/',function(req,res) {
