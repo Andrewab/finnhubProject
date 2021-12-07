@@ -1,5 +1,5 @@
 const axios = require('axios');
-//const CanvasJS = require('canvasjs');
+
 async function stockCandles(symbol, resolution, from, to) {
     try {
         const data = await axios.get(`https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=${resolution}&from=${from}&to=${to}`,{
@@ -13,32 +13,23 @@ async function stockCandles(symbol, resolution, from, to) {
         console.error(err);
     }
 }
-var finnHubData
-module.exports.generateChart =  function(CurrentStock) {
-    console.log("In Generate Chart")
-    //stockCandles('AAPL','M',1607241875,1638777875)
-    
+//var finnHubData = []
+module.exports.generateChart =  async function(CurrentStock) {
+    //console.log("In Generate Chart")
+    //tmp = await stockCandles('AAPL','M',1607241875,1638777875)
+    var finnHubData = []  
     var currentTs = new Date();
     var currentTsSeconds = Math.floor(currentTs.valueOf()/ 1000)
     var pastTs = new Date(currentTs.getTime() - (31556926 * 1000))
     var pastTsSeconds = Math.floor(pastTs.valueOf()/1000)
-/*
-        var xhttp = new XMLHttpRequest();
-        
-        xhttp.onreadystatechange = function() {
-            if(this.readyState == 4 && this.Status == 200){
-                finnHubData = xhttp.responseText;
-            }
-        }
-    */    
-        //console.log("1: " + currentTs + "2: " + pastTs)
-    console.log("CurrentStock :" + CurrentStock + "past: " + pastTsSeconds + " current: " + currentTsSeconds);
-        tmp = stockCandles(CurrentStock,'M',pastTsSeconds,currentTsSeconds);
+
+    //console.log("CurrentStock :" + CurrentStock + "past: " + pastTsSeconds + " current: " + currentTsSeconds);
+    tmp = await stockCandles(CurrentStock,'M',pastTsSeconds,currentTsSeconds);
     //tmp = JSON.parse(FinnHubStockPrices);
-    console.log(tmp)
-    for (var i = 0; i < tmp.length; i++) {
-                        //console.log('loop')
-            date = new Date.parse(timestamp)
+    //console.log(tmp)
+    for (var i = 0; i < tmp.c.length; i++) {
+            //console.log('loop')
+            date = new Date(tmp.t[i] * 1000);
             year = date.getYear();
             month = date.getMonth();
             day = date.getDay();
@@ -47,12 +38,17 @@ module.exports.generateChart =  function(CurrentStock) {
             h = tmp.h[i];
             l = tmp.l[i];
             o = tmp.o[i];
-            finnHubData += "{x: new Date(" + year + "," + month + "," + day + ",y:[" + o + "," + h + "," + l + "," + c + "]},"
-            //console.log("{x: new Date(" + year + "," + month + "," + day + ",y:[" + o + "," + h + "," + l + "," + c + "]},\n")
-
-        }   
+            finnHubData = finnHubData + "{" + "\"x\": new Date(" + year + "," + month + "," + day + "),\"y\":[" + o + "," + h + "," + l + "," + c + "]},";
+            //finnHubData = finnHubData + "{" + "\"x\":" + date + ",\"y\":[" + o + "," + h + "," + l + "," + c + "]},";
+            //finnHubData[i] = {x:date, y:[o,h,l,c]};
+            
+            //console.log(finnHubData[i])
+    }
+    return finnHubData.slice(0,-1);
+}  
 /*
-        var chart = new CanvasJS.Chart("chartContainer",
+module.exports.makeChart = function(stockPrices) {
+    var chart = new CanvasJS.Chart("chartContainer",
     {
         title:{
             text: "Basic Candle Stick Chart"
@@ -69,16 +65,13 @@ module.exports.generateChart =  function(CurrentStock) {
             valueFormatString: "MMM-YY",
             labelAngle: -45
         },
-        data: [
+        data:
         {
             type: "candlestick",
-            dataPoints: JSON.parse(finnHubData) 
+            dataPoints: stockPrices 
 
         }
-        ]
     });
-    console.log(finnHubData)
-    */
-    return finnHubData;
-    
-}  
+    return chart;
+}
+*/

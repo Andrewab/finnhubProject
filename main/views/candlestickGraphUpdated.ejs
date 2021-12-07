@@ -1,23 +1,21 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 	<style>
 		body{background: skyblue;}
 	</style>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </head>
 	<body>
-		<form action="./candlestickGraphUpdated" method="GET">
+		<form action="./candlestickGraphUpdated" method="POST">
 			<label>Stock Ticker to View: </label>
 			<input type="text" name = "CurrentStock" id="CurrentStock">
 			<input type="submit">
 		</form>
-        <div id="chartContainer" style="height: 300px; width: 100%;">
-		<script type="text/javascript">
-			const queryString = window.location.search;
-			const urlParams = new URLSearchParams(queryString);
-			searchData = urlParams.get('dataPoints');
-			var chart = new CanvasJS.Chart("chartContainer",
+        <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+        <script type="text/javascript">
+            //var tmp = JSON.parse(<%-candleStickPrices%>);
+            var chart = new CanvasJS.Chart("chartContainer",
     {
         title:{
             text: "Basic Candle Stick Chart"
@@ -34,19 +32,13 @@
             valueFormatString: "MMM-YY",
             labelAngle: -45
         },
-        data: JSON.parse("{{ articles }}"),
+        data:[
         {
             type: "candlestick",
-            dataPoints: <%=' obj$' %>
-
+            dataPoints: [<%-candleStickPrices%>] 
         }
-        
-    });
+    ]});
             chart.render();
-		</script>
-
-
-
-</div>
+    </script>
 </body>
 </html>

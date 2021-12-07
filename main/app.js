@@ -12,17 +12,17 @@ const router = express.Router();
 var app = express();
 app.set("view-engine", "ejs");
 app.use(express.json());
+app.use(bodyParser.urlencoded({extended : true}));
 //app.use(express.static())
-app.get('/candlestickGraphUpdated', async function(req,res) {
+app.post('/candlestickGraphUpdated', async function(req,res) {
 
 	//console.log('here')
 	//console.log(req.protocol + "://" + req.get('host') + req.originalUrl);
-
-	let obj = await myMod.generateChart(req.query.CurrentStock);
+	console.log(req.body.CurrentStock);
+	let obj = await myMod.generateChart(req.body.CurrentStock);
 	//console.log(obj);
-	res.render('candlestickGraphUpdated.ejs', {
-		articles: obj
-	});
+	//chart = myMod.makeChart(obj);
+	res.render('candlestickGraphUpdated.ejs',{candleStickPrices : obj});
 
 })
 app.get('/',function(req,res) {
